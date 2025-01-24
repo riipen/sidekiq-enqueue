@@ -5,7 +5,7 @@ module Sidekiq
     module Services
       class Enqueue
         def initialize(job_name, arguments)
-          @job_class = job_name.constantize
+          @job_class = Module.const_get(job_name)
           @arguments = arguments
         end
 

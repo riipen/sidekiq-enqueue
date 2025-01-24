@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
 require "rspec"
+require "sidekiq"
+require "sidekiq/web"
 
 require "sidekiq/enqueue"
+
+# Require all support files
+Dir[File.join(File.expand_path("support", __dir__), "**/*.rb")].each { |file_name| require_relative file_name }
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
