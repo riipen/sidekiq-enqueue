@@ -1,0 +1,5 @@
+en:
+  sidekiq_enqueue: Enqueue Job
+  sidekiq_enqueue_arguments: Arguments
+  sidekiq_enqueue_job_name: Job Name
+  sidekiq_enqueue_submit: Submit
