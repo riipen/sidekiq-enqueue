@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary = "Manually enqueue Sidekiq jobs from the web UI."
   spec.homepage = "https://github.com/riipen/sidekiq-enqueue"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 3.3.0"
+  spec.required_ruby_version = ">= 3.1.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["changelog_uri"] = "https://github.com/riipen/sidekiq-enqueue/blob/master/CHANGELOG.md"
