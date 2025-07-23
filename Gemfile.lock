@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sidekiq-enqueue (0.0.1)
+    sidekiq-enqueue (0.0.2)
       sidekiq (< 8)
 
 GEM
