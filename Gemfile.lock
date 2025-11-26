@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sidekiq-enqueue (0.0.2)
+    sidekiq-enqueue (0.0.3)
       sidekiq (< 8)
 
 GEM
@@ -19,7 +19,7 @@ GEM
       ast (~> 2.4.1)
       racc
     racc (1.8.1)
-    rack (3.1.16)
+    rack (3.2.4)
     rainbow (3.1.1)
     rake (13.0.6)
     redis-client (0.23.2)
