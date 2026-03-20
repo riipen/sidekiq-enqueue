@@ -5,7 +5,7 @@ require "sidekiq"
 module Sidekiq
   module Enqueue
     class DummyJob
-      include Sidekiq::Worker
+      include Sidekiq::Job
 
       def perform; end
     end
