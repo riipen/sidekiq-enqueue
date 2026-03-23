@@ -7,10 +7,19 @@ module Sidekiq
         def self.call
           eager_load_jobs!
 
-          @call ||= ObjectSpace.each_object(Class)
-                               .filter_map { |klass| job_name_for(klass) }
-                               .uniq
-                               .sort
+          job_names
+        end
+
+        def self.job_names
+          @job_names ||= ObjectSpace.each_object(Class)
+                                    .filter_map { |klass| job_name_for(klass) }
+                                    .uniq
+                                    .sort
+        end
+
+        def self.reset_cache!
+          @job_names = nil
+          @job_files = nil
         end
 
         def self.eager_load_jobs!
