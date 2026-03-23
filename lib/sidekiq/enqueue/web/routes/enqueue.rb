@@ -12,7 +12,8 @@ module Sidekiq
               Sidekiq::Enqueue::Services::Enqueue.new(url_params("job_name"), url_params("arguments")).call
 
               redirect "#{root_path}enqueue"
-            rescue StandardError
+            rescue StandardError => e
+              @enqueue_error = e
               erb File.read(File.join(VIEW_PATH, "index.html.erb"))
             end
           end

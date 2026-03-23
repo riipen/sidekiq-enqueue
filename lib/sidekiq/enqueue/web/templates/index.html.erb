@@ -55,6 +55,12 @@ end %>
 <div class="enqueue-form-container">
   <h3 class="enqueue-form-title"><%= t('sidekiq_enqueue') %></h3>
 
+  <% if defined?(@enqueue_error) && @enqueue_error %>
+    <div class="alert alert-danger" role="alert">
+      <%= @enqueue_error.message %>
+    </div>
+  <% end %>
+
   <form action="<%= root_path %>enqueue" method="post" id="enqueue-form" class="enqueue-form">
     <%= csrf_tag %>
 
