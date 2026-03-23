@@ -46,11 +46,13 @@
   localStorage.sidekiqLivePoll = "disabled";
 </script>
 
-<% available_jobs = begin
-  Sidekiq::Enqueue::Services::AvailableJobs.call
-rescue StandardError
-  ['Error Loading Jobs']
-end %>
+<% available_jobs = [] %>
+<% available_jobs_error = nil %>
+<% begin %>
+  <% available_jobs = Sidekiq::Enqueue::Services::AvailableJobs.call %>
+<% rescue StandardError %>
+  <% available_jobs_error = t('sidekiq_enqueue_jobs_load_error', default: 'Unable to load available jobs.') %>
+<% end %>
 
 <div class="enqueue-form-container">
   <h3 class="enqueue-form-title"><%= t('sidekiq_enqueue') %></h3>
@@ -72,6 +74,9 @@ end %>
           <option value="<%= job_name %>"></option>
         <% end %>
       </datalist>
+      <% if available_jobs_error %>
+        <small class="hint enqueue-form-hint text-danger"><%= available_jobs_error %></small>
+      <% end %>
       <small class="hint enqueue-form-hint"><%= t('sidekiq_enqueue_job_name_hint', default: 'Search for or enter the worker class name to enqueue.') %></small>
     </div>
 
