@@ -1,7 +1,7 @@
 en:
   sidekiq_enqueue: Enqueue Job
   sidekiq_enqueue_arguments: Arguments
-  sidekiq_enqueue_arguments_hint: Enter a JSON array of arguments to pass to the job.
+  sidekiq_enqueue_arguments_hint: Enter a comma-separated list of arguments to pass to the job.
   sidekiq_enqueue_job_name: Job Name
   sidekiq_enqueue_job_name_hint: Search for or enter the worker class name to enqueue.
   sidekiq_enqueue_submit: Submit

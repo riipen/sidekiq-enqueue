@@ -7,26 +7,26 @@ module Sidekiq
         def self.call
           eager_load_jobs!
 
-          ObjectSpace.each_object(Class)
-                     .filter_map { |klass| job_name_for(klass) }
-                     .uniq
-                     .sort
+          @call ||= ObjectSpace.each_object(Class)
+                               .filter_map { |klass| job_name_for(klass) }
+                               .uniq
+                               .sort
         end
 
         def self.eager_load_jobs!
           return unless defined?(Rails) && Rails.respond_to?(:root) && Rails.root
 
-          Dir[Rails.root.join("app/jobs/**/*.rb")].sort.each do |file|
+          job_files
+        end
+
+        def self.job_files
+          @job_files ||= Dir[Rails.root.join("app/jobs/**/*.rb")].each do |file|
             if defined?(require_dependency)
               require_dependency(file)
             else
               require(file)
             end
-          rescue StandardError => e
-            Sidekiq.logger.warn("sidekiq-enqueue: unable to load job file #{file}: #{e.class}: #{e.message}")
           end
-        rescue StandardError => e
-          Sidekiq.logger.warn("sidekiq-enqueue: unable to load app/jobs: #{e.class}: #{e.message}")
         end
 
         def self.job_name_for(klass)
