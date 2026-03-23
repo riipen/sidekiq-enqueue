@@ -8,6 +8,8 @@ module Sidekiq
           def self.register(app)
             app.get "/enqueue" do
               erb File.read(File.join(VIEW_PATH, "index.html.erb"))
+            rescue StandardError
+              erb File.read(File.join(VIEW_PATH, "index.html.erb"))
             end
           end
         end
