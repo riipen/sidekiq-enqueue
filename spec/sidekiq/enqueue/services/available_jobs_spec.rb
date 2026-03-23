@@ -15,7 +15,7 @@ RSpec.describe Sidekiq::Enqueue::Services::AvailableJobs do
 
       expect(described_class.call).to include("SpecAlphaJob", "SpecBetaJob")
       expect(described_class.call).not_to include("SpecPlainRubyClass")
-      expect(described_class.call & ["SpecAlphaJob", "SpecBetaJob"]).to eq(["SpecAlphaJob", "SpecBetaJob"])
+      expect(described_class.call & %w[SpecAlphaJob SpecBetaJob]).to eq(%w[SpecAlphaJob SpecBetaJob])
     end
   end
 end
