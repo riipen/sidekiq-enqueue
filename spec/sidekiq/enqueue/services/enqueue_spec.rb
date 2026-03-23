@@ -9,11 +9,17 @@ RSpec.describe Sidekiq::Enqueue::Services::Enqueue do
     it "enqueues a given job" do
       allow(Sidekiq::Enqueue::DummyJob).to receive(:perform_async).and_return(true)
 
-      instance = service.new("Sidekiq::Enqueue::DummyJob", "")
+      instance = service.new("Sidekiq::Enqueue::DummyJob", "one, two")
 
       instance.call
 
-      expect(Sidekiq::Enqueue::DummyJob).to have_received(:perform_async)
+      expect(Sidekiq::Enqueue::DummyJob).to have_received(:perform_async).with("one", "two")
+    end
+
+    it "raises when the job class cannot be found" do
+      instance = service.new("Sidekiq::Enqueue::MissingJob", "")
+
+      expect { instance.call }.to raise_error(NameError)
     end
   end
 end

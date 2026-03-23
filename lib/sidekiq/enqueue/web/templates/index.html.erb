@@ -1,25 +1,93 @@
-<h3><%= t('sidekiq_enqueue') %></h3>
+<style nonce="<%= csp_nonce %>">
+  .enqueue-form-container {
+    max-width: 40rem;
+    padding: 1.5rem 0;
+  }
 
-<form action="<%= root_path %>enqueue" method="post" id="enqueue-form">
-  <%= csrf_tag %>
+  .enqueue-form-title {
+    margin-bottom: 1.25rem;
+  }
 
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label" for="job_name"><%= t('sidekiq_enqueue_job_name') %></label>
-    <div class="col-sm-4">
-      <input class="form-control" type="text" name="job_name" id="job_name" />
+  .enqueue-form {
+    display: block;
+    width: 100%;
+  }
+
+  .enqueue-form-group {
+    display: block;
+    margin-bottom: 1.5rem;
+    width: 100%;
+  }
+
+  .enqueue-form-label {
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  .enqueue-form-input {
+    box-sizing: border-box;
+    display: block;
+    height: auto;
+    min-height: 2.25rem;
+    width: 100%;
+  }
+
+  .enqueue-form-hint {
+    display: block;
+    margin-top: 0.35rem;
+  }
+
+  .enqueue-form-actions {
+    margin-top: 1.5rem;
+  }
+</style>
+
+<script nonce="<%= csp_nonce %>">
+  localStorage.sidekiqLivePoll = "disabled";
+</script>
+
+<% available_jobs = [] %>
+<% available_jobs_error = nil %>
+<% begin %>
+  <% available_jobs = Sidekiq::Enqueue::Services::AvailableJobs.call %>
+<% rescue StandardError %>
+  <% available_jobs_error = t('sidekiq_enqueue_jobs_load_error', default: 'Unable to load available jobs.') %>
+<% end %>
+
+<div class="enqueue-form-container">
+  <h3 class="enqueue-form-title"><%= t('sidekiq_enqueue') %></h3>
+
+  <% if defined?(@enqueue_error) && @enqueue_error %>
+    <div class="alert alert-danger" role="alert">
+      <%= @enqueue_error.message %>
     </div>
-  </div>
+  <% end %>
 
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label" for="arguments"><%= t('sidekiq_enqueue_arguments') %></label>
-    <div class="col-sm-4">
-      <input class="form-control" type="text" name="arguments" id="arguments" />
+  <form action="<%= root_path %>enqueue" method="post" id="enqueue-form" class="enqueue-form">
+    <%= csrf_tag %>
+
+    <div class="form-group string enqueue-form-group">
+      <label for="job_name" class="enqueue-form-label"><%= t('sidekiq_enqueue_job_name') %></label>
+      <input class="form-control enqueue-form-input" type="text" name="job_name" id="job_name" list="available_jobs" autocomplete="off" />
+      <datalist id="available_jobs">
+        <% available_jobs.each do |job_name| %>
+          <option value="<%= job_name %>"></option>
+        <% end %>
+      </datalist>
+      <% if available_jobs_error %>
+        <small class="hint enqueue-form-hint text-danger"><%= available_jobs_error %></small>
+      <% end %>
+      <small class="hint enqueue-form-hint"><%= t('sidekiq_enqueue_job_name_hint', default: 'Search for or enter the worker class name to enqueue.') %></small>
     </div>
-  </div>
 
-  <div class="form-group row">
-    <div class="col-sm-4">
+    <div class="form-group string enqueue-form-group">
+      <label for="arguments" class="enqueue-form-label"><%= t('sidekiq_enqueue_arguments') %></label>
+      <input class="form-control enqueue-form-input" type="text" name="arguments" id="arguments" autocomplete="off" />
+      <small class="hint enqueue-form-hint"><%= t('sidekiq_enqueue_arguments_hint', default: 'Enter a JSON array of arguments to pass to the job.') %></small>
+    </div>
+
+    <div class="form-actions enqueue-form-actions">
       <button type="submit" class="btn btn-danger"><%= t('sidekiq_enqueue_submit') %></button>
     </div>
-  </div>
-</form>
+  </form>
+</div>

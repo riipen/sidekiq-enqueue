@@ -34,6 +34,9 @@ RSpec/SpecFilePathFormat:
 RSpec/SubjectStub:
   Enabled: false
 
+RSpec/MultipleExpectations:
+  Enabled: false
+
 RSpec/VerifiedDoubles:
   Enabled: false
 

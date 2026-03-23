@@ -5,6 +5,7 @@ require "pathname"
 ROUTE_PATH = File.expand_path("web/routes", __dir__)
 
 require_relative "services/enqueue"
+require_relative "services/available_jobs"
 
 require_relative "web/routes/enqueue"
 require_relative "web/routes/index"
